@@ -37,10 +37,9 @@ class Button():
 class Card():
     def __init__(self, card_tuple, *args):
         self.posn = pnr.Point(args[0], args[1])
-        self.rect = pnr.Rectangle(self.posn, win_size[0]*(3/20), win_size[1]*((17*72)/3000))
-#        self.width = win_size[0]*(3/20)
-#        self.height = win_size[1]*((17*72)/3000)
+        self.rect = pnr.Rectangle(self.posn, win_size[0]*(3/20), win_size[0]*(3/20)*(88/62))
         self.card = card_tuple
+        self.upsidedown = True
     pass
 
 class Table():
@@ -64,12 +63,17 @@ class Table():
         y_pos = (self.y+self.height/10) + self.height*(9/100)
         self.card_on_table.append(Card(card_tuple, x_pos, y_pos))
         
-    def draw_card(self, window, idx):
-        print(self.card_on_table[idx].posn)
-        pygame.draw.rect(window, WHITE, (self.card_on_table[idx].posn.x, self.card_on_table[idx].posn.y, self.card_on_table[idx].rect.width, self.card_on_table[idx].rect.height), 0)
-        font = pygame.font.SysFont('comicsans', 60)
-        text = font.render(str(self.card_on_table[idx].card), 1, (0,0,0))
-        window.blit(text, (self.card_on_table[idx].posn.x + (self.card_on_table[idx].rect.width/2 - text.get_width()/2), self.card_on_table[idx].posn.y + (self.card_on_table[idx].rect.height/2 - text.get_height()/2)))
+    def draw_card(self, window, idx, upsidedown):#여기 upsidedown을 처리해줭햐ㅐ!!!
+        if upsidedown:
+            pygame.draw.rect(window, WHITE, (self.card_on_table[idx].posn.x, self.card_on_table[idx].posn.y, self.card_on_table[idx].rect.width, self.card_on_table[idx].rect.height), 0)
+            font = pygame.font.SysFont('comicsans', 60)
+            text = font.render('back', 1, (0,0,0))
+            window.blit(text, (self.card_on_table[idx].posn.x + (self.card_on_table[idx].rect.width/2 - text.get_width()/2), self.card_on_table[idx].posn.y + (self.card_on_table[idx].rect.height/2 - text.get_height()/2)))
+        else:
+            pygame.draw.rect(window, WHITE, (self.card_on_table[idx].posn.x, self.card_on_table[idx].posn.y, self.card_on_table[idx].rect.width, self.card_on_table[idx].rect.height), 0)
+            font = pygame.font.SysFont('comicsans', 60)
+            text = font.render(str(self.card_on_table[idx].card), 1, (0,0,0))
+            window.blit(text, (self.card_on_table[idx].posn.x + (self.card_on_table[idx].rect.width/2 - text.get_width()/2), self.card_on_table[idx].posn.y + (self.card_on_table[idx].rect.height/2 - text.get_height()/2)))
 
 pygame.init()
 
@@ -110,8 +114,9 @@ while run:
         if on_table < 5:
             pokertable.put_on_card(card_set.pop())
             on_table += 1
+            pygame.time.wait(100)
         for i in range(len(pokertable.card_on_table)):
-            pokertable.draw_card(screen, i)
+            pokertable.draw_card(screen, i, pokertable.card_on_table[i].upsidedown)
 
     # This MUST happen after all the other drawing commands
     pygame.display.update()
