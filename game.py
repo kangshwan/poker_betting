@@ -63,7 +63,7 @@ class Table():
         y_pos = (self.y+self.height/10) + self.height*(9/100)
         self.card_on_table.append(Card(card_tuple, x_pos, y_pos))
         
-    def draw_card(self, window, idx, upsidedown):#여기 upsidedown을 처리해줭햐ㅐ!!!
+    def draw_card(self, window, idx, upsidedown):
         if upsidedown:
             pygame.draw.rect(window, WHITE, (self.card_on_table[idx].posn.x, self.card_on_table[idx].posn.y, self.card_on_table[idx].rect.width, self.card_on_table[idx].rect.height), 0)
             font = pygame.font.SysFont('comicsans', 60)
@@ -106,6 +106,10 @@ while run:
             if startButton.isOver(pos):
                 print("pressed")
                 ready = False
+            if ready == False:
+                for card in pokertable.card_on_table:
+                    if card.rect.contains(pnr.Point(pos[0],pos[1])):
+                        card.upsidedown = False
     screen.fill(WHITE)
     pokertable.draw(screen)
     if ready:
