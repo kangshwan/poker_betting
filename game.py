@@ -12,6 +12,7 @@ LIGHTBLUE = ( 75,137,220)
 win_size  = [1280,960]
 
 class Button():
+
     def __init__(self, color, position, width, height, text = ''):
         self.color = color
         self.posn = position
@@ -35,6 +36,7 @@ class Button():
         return False
 
 class Card():
+
     def __init__(self, card_tuple, *args):
         self.posn = pnr.Point(args[0], args[1])
         self.rect = pnr.Rectangle(self.posn, win_size[0]*(3/20), win_size[0]*(3/20)*(88/62))
@@ -43,6 +45,7 @@ class Card():
     pass
 
 class Table():
+
     def __init__(self, color, win_size):
         self.color = color
         self.x = 0
@@ -100,8 +103,8 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            pos = pygame.mouse.get_pos()
+        elif event.type == pygame.MOUSEBUTTONDOWN:      #마우스 클릭시
+            pos = pygame.mouse.get_pos()                #pos 에 마우스 좌표값 저장(tuple)
             print(pos)
             if startButton.isOver(pos):
                 print("pressed")
